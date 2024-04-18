@@ -42,14 +42,25 @@ class Db:
         self.__cur.execute("INSERT INTO kurs VALUES (?, ?, ?)", [kurs.getid(), kurs.getname(), kurs.getraum()])
 
     def getKurse(self):
+        retlist = []
         res = self.__cur.execute("SELECT * From kurs")
         ret = res.fetchall()
-        k = Kurs()
-        k.settid(ret[0][0])
-        k.setname(ret[0][1])
-        k.setraum(ret[0][2])
-        return k
+        for i in ret:
+            k = Kurs()
+            k.settid(i[0])
+            k.setname(i[1])
+            k.setraum(i[2])
+            retlist.append(k)
+        return retlist
 
+    def printfunktion(self):
+        res = self.__cur.execute("SELECT * From kurs")
+        ret = res.fetchall()
+
+        for i in ret:
+            print("die id ist:", i[0])
+            print("das fach ist:", i[1])
+            print("der raum ist:", i[2])
 
 kurs1 = Kurs()
 kurs1.settid(1)
@@ -65,6 +76,9 @@ db = Db()
 
 db.init()
 #db.create()
-db.addKurs(kurs)
+db.addKurs(kurs1)
+db.addKurs(kurs2)
 ret = db.getKurse()
-print(ret)
+ret1 = db.printfunktion()
+
+print(ret[0].getname())
